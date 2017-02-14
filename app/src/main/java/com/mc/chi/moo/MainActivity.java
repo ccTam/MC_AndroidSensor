@@ -7,13 +7,13 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
-import android.util.Log;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
     private SensorManager mSM;
     private Sensor[] mSensor = new Sensor[9];
     private boolean[] bSensor = new boolean[9];
+    private boolean[] iniValue = new boolean[9];
     private String[] startingText = new String[9];
     private TextView[] textV = new TextView[9];
     private float[] maxX = new float[9];
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
                     x, maxX[i], minX[i], y, maxY[i], minY[i], z, maxZ[i], minZ[i]);
             textV[i].setText(Html.fromHtml(startingText[i] + s));
         }
-    
+
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
         }
@@ -141,6 +141,10 @@ public class MainActivity extends AppCompatActivity {
         public void onSensorChanged(SensorEvent data) {
             int i = 7;
             float x = data.values[0];
+            if (iniValue[i]) {
+                maxX[i] = minX[i] = x;
+                iniValue[i] = false;
+            }
             setPeak(x, 0, 0, i);
             String s = String.format("%2.2f hPa<pre>    </pre>Max: %2.2f<pre>    </pre>Min: %2.2f", x, maxX[i], minX[i]);
             textV[i].setText(Html.fromHtml(startingText[i] + s));
@@ -193,6 +197,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 bSensor[i] = true;
             }
+            iniValue[i] = true;
         }
     }
 
@@ -218,11 +223,18 @@ public class MainActivity extends AppCompatActivity {
         textV[6] = (TextView) findViewById(R.id.sen6);
         textV[7] = (TextView) findViewById(R.id.sen7);
         textV[8] = (TextView) findViewById(R.id.sen8);
-        minX[4] = 10.0f;
-        minX[6] = 5.0f;
     }
 
     private void setPeak(float x, float y, float z, int index) {
+        if (iniValue[index]) {
+            maxX[index] = x;
+            minX[index] = x;
+            maxY[index] = y;
+            minY[index] = y;
+            maxZ[index] = z;
+            minZ[index] = z;
+            iniValue[index] = false;
+        }
         if (x > maxX[index]) {
             maxX[index] = x;
         }
