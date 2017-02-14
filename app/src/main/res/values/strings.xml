@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">moo</string>
+    <string name="sAcc">Loading...</string>
+    <string name="sLinAcc">Loading...</string>
+    <string name="sGravity">Loading...</string>
+    <string name="sGyro">Loading...</string>
+    <string name="sLight">Loading...</string>
+    <string name="sMagneticField">Loading...</string>
+    <string name="sProximity">Loading...</string>
+    <string name="sPressure">Loading...</string>
+    <string name="sTemperature">Loading...</string>
+</resources>
